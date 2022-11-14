@@ -13,25 +13,25 @@ A [MagicMirror²](https://magicmirror.builders) helper module to display Prometh
 
 In your terminal, go to your MagicMirror's Module folder:
 
-```
+```bash
 cd ~/MagicMirror/modules
 ```
 
 Clone this repository:
 
-```
+```bash
 git clone https://github.com/spyder007/MMM-PrometheusAlerts.git
 ```
 
 Go to the modules folder:
 
-```
+```bash
 cd MMM-PrometheusAlerts
 ```
 
 Install the dependencies:
 
-```
+```bash
 npm install --production
 ```
 
@@ -47,14 +47,12 @@ Add the module to the modules array in the `config/config.js` file:
 
 | **Option**           | **Default**     | **Description**                                                               |
 | -------------------- | --------------- | ----------------------------------------------------------------------------- |
-| `prometheusUrl       | ''              | The URL of the Prometheus Instance.                                           |
+| `prometheusUrl`      | ''              | The URL of the Prometheus Instance.                                           |
 | `animationSpeed`     | 3000            | **Optional** The speed of the show and hide animations in milliseconds        |
 | `useHeader`          | `true`          | **Optional** Whether or not to show the header                                |
 | `maxWidth`           | `300px`         | **Optional** The maximum width for this module                                |
 | `initialLoadDelay`   | `3250`          | **Optional** How long to wait, in milliseconds, before the first status check |
 | `updateInterval`     | `2 * 60 * 1000` | **Optional** How often to check the status (defaults to 2 minutes)            |
-| `showComponents`     | `true`          | **Optional** Output component status when set to `true`                       |
-| `componentsToIgnore` | []              | **Optional** String array of components to ignore in display                  |
 
 ## Config Examples
 
@@ -62,19 +60,19 @@ Add the module to the modules array in the `config/config.js` file:
 
 ```javascript
     {
-		module: "MMM-PrometheusAlerts",
-		position: "bottom_right",
-		config: {
-			prometheusUrl: "https//prometheus.mydomain.com"
-		}
-	},
+      module: "MMM-PrometheusAlerts",
+      position: "bottom_right",
+      config: {
+        prometheusUrl: "https//prometheus.mydomain.com"
+      }
+    },
 ```
 
 ## Updating
 
 To update the module to the latest version, use your terminal to go to your MMM-PrometheusAlerts module folder and type the following command:
 
-```
+```bash
 git pull
 ```
 
