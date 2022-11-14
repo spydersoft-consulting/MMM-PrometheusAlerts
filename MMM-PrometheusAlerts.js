@@ -82,7 +82,6 @@ Module.register("MMM-PrometheusAlerts", {
 			wrapper.appendChild(header);
 		}
 
-		
 		if (this.PrometheusAlerts.alerts.length > 0) {
 			this.PrometheusAlerts.alerts.forEach((alert) => {
 				wrapper.appendChild(this.getAlertCard(alert));
@@ -118,7 +117,7 @@ Module.register("MMM-PrometheusAlerts", {
 
 		return card;
 	},
-	
+
 	getAlertStatusIcon: function (alert) {
 		var icon = document.createElement("i");
 		var iconName = "";
