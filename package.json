@@ -1,0 +1,46 @@
+{
+	"name": "MMM-PrometheusAlerts",
+	"version": "1.0.0",
+	"description": "A MagicMirror helper module to show incidents from a StatusPage.io page",
+	"main": "MMM-PrometheusAlerts.js",
+	"scripts": {
+		"test": "npm run test:unit && npm run test:prettier && npm run test:js",
+		"test:unit": "NODE_ENV=test mocha tests --recursive",
+		"test:prettier": "prettier --check **/*.{js,css,json,md,yml}",
+		"test:js": "eslint *.js tests/**/*.js --config .eslintrc.json",
+		"lint:prettier": "prettier --write **/*.{js,css,json,md,yml}",
+		"lint:js": "eslint *.js tests/**/*.js --config .eslintrc.json --fix"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/spyder007/MMM-PrometheusAlerts.git"
+	},
+	"keywords": [
+		"MagicMirror",
+		"Module",
+		"Scheduler"
+	],
+	"author": "Matt Gerega",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/spyder007/MMM-PrometheusAlerts.git/issues"
+	},
+	"_moduleAliases": {
+		"node_helper": "../../js/node_helper.js",
+		"logger": "../../js/logger.js"
+	},
+	"homepage": "https://github.com/spyder007/MMM-PrometheusAlerts.git#readme",
+	"devDependencies": {
+		"chai": "^4.2.0",
+		"eslint": "^7.24.0",
+		"eslint-config-prettier": "^8.1.0",
+		"eslint-plugin-jsdoc": "^30.7.8",
+		"eslint-plugin-prettier": "^3.4.0",
+		"mocha": "^8.2.1",
+		"module-alias": "^2.2.2",
+		"prettier": "^2.2.1"
+	},
+	"dependencies": {
+		"date-fns": "^2.25.0"
+	}
+}
