@@ -35,6 +35,10 @@ module.exports = NodeHelper.create({
 
 	getPrometheusAlerts: function (prometheusUrl) {
 		let self = this;
+		if(self.pending) {
+			return;
+		}
+		self.pending = true;
 		var url = prometheusUrl + "/api/v1/alerts";
 		fetch(url, {
 			method: "get"
@@ -67,6 +71,9 @@ module.exports = NodeHelper.create({
 			.catch((error) => {
 				self.logError(error);
 				self.sendSocketNotification("PROMTHEUSALERT_RETRIEVE_ERROR");
+			})
+			.finally(() => {
+				self.pending = false;
 			});
 	},
 
