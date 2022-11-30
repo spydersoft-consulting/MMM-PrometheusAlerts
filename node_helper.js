@@ -35,7 +35,7 @@ module.exports = NodeHelper.create({
 
 	getPrometheusAlerts: function (prometheusUrl) {
 		let self = this;
-		if(self.pending) {
+		if (self.pending) {
 			return;
 		}
 		self.pending = true;

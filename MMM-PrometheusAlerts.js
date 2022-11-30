@@ -31,7 +31,7 @@ Module.register("MMM-PrometheusAlerts", {
 
 	scheduleUpdate: function (delay) {
 		var self = this;
-		if(self.isScheduled) {
+		if (self.isScheduled) {
 			return;
 		}
 		var nextLoad = this.config.updateInterval;
