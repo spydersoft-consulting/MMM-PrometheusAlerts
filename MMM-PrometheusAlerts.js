@@ -30,14 +30,19 @@ Module.register("MMM-PrometheusAlerts", {
 	},
 
 	scheduleUpdate: function (delay) {
+		var self = this;
+		if (self.isScheduled) {
+			return;
+		}
 		var nextLoad = this.config.updateInterval;
 		if (typeof delay !== "undefined" && delay !== null && delay >= 0) {
 			nextLoad = delay;
 		}
 
-		var self = this;
+		self.isScheduled = true;
 		setTimeout(function () {
 			Log.info("MMM-PrometheusAlerts - Requesting status update");
+			self.isScheduled = false;
 			self.sendSocketNotification("GET_PROMTHEUS_ALERTS", { prometheusUrl: self.config.prometheusUrl });
 		}, nextLoad);
 	},
