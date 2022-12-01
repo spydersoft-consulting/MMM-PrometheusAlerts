@@ -78,3 +78,7 @@ git pull
 
 If you haven't changed the modules, this should work without any problems.
 Type `git status` to see your changes, if there are any, you can reset them with `git reset --hard`. After that, git pull should be possible.
+
+## Contributing
+
+Please read the [Contribution Guide](CONTRIBUTING.md) for details on contributing to the project.

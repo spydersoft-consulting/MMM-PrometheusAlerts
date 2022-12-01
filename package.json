@@ -5,7 +5,7 @@
 	"main": "MMM-PrometheusAlerts.js",
 	"scripts": {
 		"test": "npm run test:unit && npm run test:prettier && npm run test:js",
-		"test:unit": "NODE_ENV=test mocha tests --recursive",
+		"test:unit": "cross-env NODE_ENV=test mocha tests --recursive",
 		"test:prettier": "prettier --check **/*.{js,css,json,md,yml}",
 		"test:js": "eslint *.js tests/**/*.js --config .eslintrc.json",
 		"lint:prettier": "prettier --write **/*.{js,css,json,md,yml}",
@@ -32,11 +32,12 @@
 	"homepage": "https://github.com/spyder007/MMM-PrometheusAlerts.git#readme",
 	"devDependencies": {
 		"chai": "^4.2.0",
+		"cross-env": "^7.0.3",
 		"eslint": "^7.24.0",
 		"eslint-config-prettier": "^8.1.0",
 		"eslint-plugin-jsdoc": "^30.7.8",
 		"eslint-plugin-prettier": "^3.4.0",
-		"mocha": "^8.2.1",
+		"mocha": "^10.1.0",
 		"module-alias": "^2.2.2",
 		"prettier": "^2.2.1"
 	},
