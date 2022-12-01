@@ -7,7 +7,6 @@ const { formatDistanceToNow } = require("date-fns");
 const NodeHelper = require("node_helper");
 const fetch = require("node-fetch");
 const Log = require("logger");
-const { json } = require("express");
 
 module.exports = NodeHelper.create({
 	start: function () {
@@ -19,18 +18,6 @@ module.exports = NodeHelper.create({
 			Log.info(`[MMM-PrometheusAlerts] - Processing GET_PROMTHEUS_ALERTS notification for ${payload.prometheusUrl}`);
 			this.getPrometheusAlerts(payload.prometheusUrl);
 		}
-	},
-
-	inGroup: function (comp, group = null) {
-		return comp.group_id === group;
-	},
-
-	hasIncident: function (incidents, comp) {
-		return incidents.findIndex((inc) => inc.componentId === comp.id) !== -1;
-	},
-
-	ignoreComponent: function (componentsToIgnore, compId) {
-		return componentsToIgnore.findIndex((comp) => comp === compId) !== -1;
 	},
 
 	getPrometheusAlerts: function (prometheusUrl) {
