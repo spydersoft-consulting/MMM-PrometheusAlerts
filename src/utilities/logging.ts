@@ -1,26 +1,26 @@
 export class Logger {
-  logger: typeof Log;
+  logger?: typeof Log;
   moduleName: string;
 
-  constructor(moduleName: string, logInstance: typeof Log) {
+  constructor(moduleName: string, logInstance: typeof Log | undefined) {
     this.logger = logInstance;
     this.moduleName = moduleName;
   }
 
   error(message: string) {
-    this.logger.error(this.formatMessage(message));
+    this.logger?.error(this.formatMessage(message));
   }
 
   warn(message: string) {
-    this.logger.warn(this.formatMessage(message));
+    this.logger?.warn(this.formatMessage(message));
   }
 
   info(message: string) {
-    this.logger.info(this.formatMessage(message));
+    this.logger?.info(this.formatMessage(message));
   }
 
   log(message: string) {
-    this.logger.log(this.formatMessage(message));
+    this.logger?.log(this.formatMessage(message));
   }
 
   formatMessage(message: string) {

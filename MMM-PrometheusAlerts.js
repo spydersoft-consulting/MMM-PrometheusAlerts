@@ -83,16 +83,16 @@
 			this.moduleName = moduleName;
 		}
 		error(message) {
-			this.logger.error(this.formatMessage(message));
+			this.logger?.error(this.formatMessage(message));
 		}
 		warn(message) {
-			this.logger.warn(this.formatMessage(message));
+			this.logger?.warn(this.formatMessage(message));
 		}
 		info(message) {
-			this.logger.info(this.formatMessage(message));
+			this.logger?.info(this.formatMessage(message));
 		}
 		log(message) {
-			this.logger.log(this.formatMessage(message));
+			this.logger?.log(this.formatMessage(message));
 		}
 		formatMessage(message) {
 			return `[${this.moduleName}] - ${message}`;

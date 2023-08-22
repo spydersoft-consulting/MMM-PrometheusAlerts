@@ -7,6 +7,7 @@
 		"test": "npm run test:unit && npm run test:prettier && npm run lint:js",
 		"test:unit": "jest",
 		"test:prettier": "prettier --check **/*.{js,ts,css,json,md,yml}",
+		"lint": "npm run lint:js && npm run lint:prettier",
 		"lint:prettier": "prettier --write **/*.{js,ts,css,json,md,yml}",
 		"lint:js": "eslint --ignore-path .eslintignore --cache --fix --max-warnings 0 --ext .ts --ext .js .",
 		"prepare": "husky install",
