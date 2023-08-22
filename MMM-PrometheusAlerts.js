@@ -1,131 +1,38 @@
-/* Magic Mirror
- * Module: MMM-PrometheusAlerts
- *
- * By Matt Gerega
- *
- */
-Module.register("MMM-PrometheusAlerts", {
-	// Module config defaults.           // Make all changes in your config.js file
-	defaults: {
-		prometheusUrl: "",
-		useHeader: true, // false if you don't want a header
-		headerText: null,
-		maxWidth: "300px",
-		animationSpeed: 1000, // fade speed
-		initialLoadDelay: 1500,
-		updateInterval: 2 * 60 * 1000 // 2 minutes
-	},
+(function () {
+	"use strict";
 
-	requiresVersion: "2.1.0",
+	var ModuleNotification;
+	(function (ModuleNotification) {
+		ModuleNotification["RETRIEVE"] = "GET_PROMTHEUS_ALERTS";
+		ModuleNotification["CONFIG"] = "CONFIGURE_PROMETHEUS";
+		ModuleNotification["RESULTS"] = "PROMTHEUSALERT_RESULT";
+		ModuleNotification["ERROR"] = "PROMTHEUSALERT_RETRIEVE_ERROR";
+	})(ModuleNotification || (ModuleNotification = {}));
 
-	getStyles: function () {
-		return ["MMM-PrometheusAlerts.css"];
-	},
-
-	start: function () {
-		Log.info("Starting module: " + this.name);
-
-		this.PrometheusAlerts = {};
-		this.scheduleUpdate(this.config.initialLoadDelay);
-	},
-
-	scheduleUpdate: function (delay) {
-		var self = this;
-		if (self.isScheduled) {
-			return;
-		}
-		var nextLoad = this.config.updateInterval;
-		if (typeof delay !== "undefined" && delay !== null && delay >= 0) {
-			nextLoad = delay;
-		}
-
-		self.isScheduled = true;
-		setTimeout(function () {
-			Log.info("MMM-PrometheusAlerts - Requesting status update");
-			self.isScheduled = false;
-			self.sendSocketNotification("GET_PROMTHEUS_ALERTS", { prometheusUrl: self.config.prometheusUrl });
-		}, nextLoad);
-	},
-
-	socketNotificationReceived: function (notification, payload) {
-		Log.info("[MMM-PrometheusAlerts] - socket notification received ", notification);
-		if (notification === "PROMTHEUSALERT_RESULT") {
-			this.processPrometheusAlerts(payload);
-			this.updateDom(this.config.animationSpeed);
-		}
-		// If an error occurs, reschedule an update to try again
-		if (notification === "PROMTHEUSALERT_RETRIEVE_ERROR") {
-			this.scheduleUpdate();
-		}
-	},
-
-	processPrometheusAlerts: function (data) {
-		Log.info("[MMM-PrometheusAlerts] - processing alert data ", this.PrometheusAlerts);
-		this.PrometheusAlerts = data;
-		this.loaded = true;
-		this.scheduleUpdate();
-	},
-
-	getDom: function () {
-		var wrapper = document.createElement("div");
-		wrapper.className = "wrapper";
-		wrapper.style.maxWidth = this.config.maxWidth;
-
-		if (!this.loaded) {
-			wrapper.innerHTML = "Prometheus Alerts";
-			wrapper.classList.add("bright", "light", "small");
-			return wrapper;
-		}
-
-		//  Header
-		if (this.config.useHeader !== false) {
-			var header = document.createElement("header");
-			header.classList.add("header", "small", "dimmed", "bold");
-			var text = document.createElement("span");
-			text.innerHTML = this.config.headerText !== null && this.config.headerText !== "" ? this.config.headerText : this.PrometheusAlerts.title;
-			header.appendChild(text);
-			wrapper.appendChild(header);
-		}
-
-		if (this.PrometheusAlerts.alerts.length > 0) {
-			this.PrometheusAlerts.alerts.forEach((alert) => {
-				wrapper.appendChild(this.getAlertCard(alert));
-			});
-		}
-
-		return wrapper;
-	}, // <-- closes getDom
-	getAlertCard: function (alert) {
-		var card = document.createElement("div");
+	const getAlertCard = (alert) => {
+		const card = document.createElement("div");
 		card.classList.add("prom-alert-wrapper");
-
-		var dateWrapper = document.createElement("div");
+		const dateWrapper = document.createElement("div");
 		dateWrapper.classList.add("status-wrapper");
 		card.appendChild(dateWrapper);
-
-		var dataWrapper = document.createElement("div");
+		const dataWrapper = document.createElement("div");
 		dataWrapper.classList.add("data-wrapper");
 		card.appendChild(dataWrapper);
-
 		// Icon
-		dateWrapper.appendChild(this.getAlertStatusIcon(alert));
-
-		var title = document.createElement("div");
+		dateWrapper.appendChild(getAlertStatusIcon(alert));
+		const title = document.createElement("div");
 		title.classList.add("small", "bright", "no-wrap", "title");
 		title.innerHTML = alert.annotations.summary;
 		dataWrapper.appendChild(title);
-
-		var startDiv = document.createElement("div");
+		const startDiv = document.createElement("div");
 		startDiv.classList.add("xsmall", "no-wrap", "dimmed");
 		startDiv.innerText = alert.annotations.description;
 		dataWrapper.appendChild(startDiv);
-
 		return card;
-	},
-
-	getAlertStatusIcon: function (alert) {
-		var icon = document.createElement("i");
-		var iconName = "";
+	};
+	const getAlertStatusIcon = (alert) => {
+		const icon = document.createElement("i");
+		let iconName = "";
 		switch (alert.state) {
 			case "pending":
 				iconName = "exclamation-triangle";
@@ -134,8 +41,127 @@ Module.register("MMM-PrometheusAlerts", {
 				iconName = "exclamation-circle";
 				break;
 		}
-
 		icon.classList.add("fa", "fa-fw", `fa-${iconName}`, "state-" + alert.state);
 		return icon;
+	};
+	const getWrapperElement = (config) => {
+		const wrapper = document.createElement("div");
+		wrapper.className = "wrapper";
+		wrapper.style.maxWidth = config.maxWidth ?? "auto";
+		return wrapper;
+	};
+	const getLoadingView = (config) => {
+		const wrapper = getWrapperElement(config);
+		wrapper.innerHTML = "Prometheus Alerts";
+		wrapper.classList.add("bright", "light", "small");
+		return wrapper;
+	};
+	const getSummaryView = (summary, config) => {
+		const wrapper = getWrapperElement(config);
+		//  Header
+		if (config.useHeader) {
+			const header = document.createElement("header");
+			header.classList.add("header", "small", "dimmed", "bold");
+			const text = document.createElement("span");
+			text.innerHTML = config.headerText !== undefined && config.headerText !== "" ? config.headerText : summary.title;
+			header.appendChild(text);
+			wrapper.appendChild(header);
+		}
+		if (summary.alerts.length > 0) {
+			summary.alerts.forEach((alert) => {
+				wrapper.appendChild(getAlertCard(alert));
+			});
+		}
+		return wrapper;
+	};
+
+	class Logger {
+		logger;
+		moduleName;
+		constructor(moduleName, logInstance) {
+			this.logger = logInstance;
+			this.moduleName = moduleName;
+		}
+		error(message) {
+			this.logger.error(this.formatMessage(message));
+		}
+		warn(message) {
+			this.logger.warn(this.formatMessage(message));
+		}
+		info(message) {
+			this.logger.info(this.formatMessage(message));
+		}
+		log(message) {
+			this.logger.log(this.formatMessage(message));
+		}
+		formatMessage(message) {
+			return `[${this.moduleName}] - ${message}`;
+		}
 	}
-});
+
+	Module.register("MMM-PrometheusAlerts", {
+		// Module config defaults.           // Make all changes in your config.js file
+		defaults: {
+			prometheusUrl: "",
+			useHeader: true,
+			headerText: undefined,
+			maxWidth: "300px",
+			animationSpeed: 1000,
+			initialLoadDelay: 1500,
+			updateInterval: 2 * 60 * 1000 // 2 minutes
+		},
+		getLogger: function () {
+			return new Logger("MMM-PrometheusAlerts module", Log);
+		},
+		requiresVersion: "2.1.0",
+		summaryData: {},
+		getStyles: function () {
+			return ["MMM-PrometheusAlerts.css"];
+		},
+		start: function () {
+			this.getLogger().info("Starting module: " + this.name);
+			this.sendSocketNotification(ModuleNotification.CONFIG, this.config);
+			this.scheduleUpdate(this.config.initialLoadDelay);
+		},
+		scheduleUpdate: function (delay) {
+			if (this.isScheduled) {
+				return;
+			}
+			let nextLoad = this.config.updateInterval;
+			if (typeof delay !== "undefined" && delay !== undefined && delay >= 0) {
+				nextLoad = delay;
+			}
+			this.isScheduled = true;
+			setTimeout(() => {
+				this.getLogger().info("Requesting status update");
+				this.isScheduled = false;
+				this.sendSocketNotification(ModuleNotification.RETRIEVE, {});
+			}, nextLoad);
+		},
+		socketNotificationReceived: function (notification, payload) {
+			this.getLogger().info("socket notification received ", notification);
+			if (notification === ModuleNotification.RESULTS) {
+				const summary = payload;
+				if (summary) {
+					this.summaryData = summary;
+					this.getLogger().info("Processing Alert Data ", this.summaryData);
+					this.loaded = true;
+					this.scheduleUpdate();
+					this.updateDom(this.config.animationSpeed);
+				} else {
+					this.getLogger().warn("Summary data not formatted correctly.");
+				}
+			}
+			// If an error occurs, reschedule an update to try again
+			if (notification === "PROMTHEUSALERT_RETRIEVE_ERROR") {
+				this.scheduleUpdate();
+			}
+		},
+		getDom: function () {
+			if (!this.loaded) {
+				return getLoadingView(this.config);
+			}
+			return getSummaryView(this.summaryData, this.config);
+		}
+	});
+})();
