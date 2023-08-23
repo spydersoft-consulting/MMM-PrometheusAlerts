@@ -48,7 +48,7 @@ Scan through our [existing issues](https://github.com/spyder007/MMM-PrometheusAl
 - Using the command line:
   - [Fork the repo](https://docs.github.com/en/github/getting-started-with-github/fork-a-repo#fork-an-example-repository) so that you can make your changes without affecting the original project until you're ready to merge them.
 
-1. Install or update to **Node.js v16**.
+1. Install or update to **Node.js v18**.
 
 2. Create a working branch and start with your changes!
 
@@ -81,6 +81,20 @@ npm run test:prettier
 npm run test:js
 
 ```
+
+#### Build Commands
+
+This module is written and tested using Typescript, however, to be used by MagicMirror, `rollup` must execute and create the necessary Javascript files for
+the module and the `node_helper`.
+
+This is all encapsulated in the build command:
+
+```bash
+# build module JS files from typescript
+npm run build
+```
+
+You can use `npm run dev` to build with inline source maps, and `npm run watch` to build (and rebuild) on changes.
 
 ### Pull Request
 

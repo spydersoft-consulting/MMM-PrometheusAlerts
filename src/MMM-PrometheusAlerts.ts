@@ -57,7 +57,7 @@ Module.register<Config>("MMM-PrometheusAlerts", {
       const summary: Summary = payload as Summary;
       if (summary) {
         this.summaryData = summary;
-        this.getLogger().info("Processing Alert Data ", this.summaryData);
+        this.getLogger().info(`Processing Alert Data: Alert Count = ${summary.alerts.length}`, this.summaryData);
         this.loaded = true;
         this.scheduleUpdate();
         this.updateDom(this.config.animationSpeed);

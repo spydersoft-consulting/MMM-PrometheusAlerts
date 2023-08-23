@@ -45,8 +45,7 @@ export class PrometheusService {
           alerts: alerts
         };
 
-        this.logger.info("Sending Summary Data");
-        this.logger.log(JSON.stringify(summaryData));
+        this.logger.info(`Sending Summary Data: Alert Count = ${summaryData.alerts.length}`);
         return summaryData;
       })
       .catch((error) => {

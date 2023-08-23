@@ -72,3 +72,6 @@ Temporary Items
 
 
 .vscode/*
+
+MMM-PrometheusAlerts.js
+node_helper.js
