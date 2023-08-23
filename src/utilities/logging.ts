@@ -1,4 +1,6 @@
-export class Logger {
+import * as Log from "logger";
+
+export class LogWrapper {
   logger?: typeof Log;
   moduleName: string;
 

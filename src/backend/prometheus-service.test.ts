@@ -1,10 +1,10 @@
 import { Response } from "node-fetch";
-import { Logger } from "../utilities/logging";
+import { LogWrapper } from "../utilities/logging";
 import { PrometheusService } from "./prometheus-service";
 
 jest.mock("../utilities/logging", () => {
   return {
-    Logger: jest.fn().mockImplementation(() => {
+    LogWrapper: jest.fn().mockImplementation(() => {
       return {
         error: jest.fn().mockImplementation(),
         warn: jest.fn().mockImplementation(),
@@ -27,7 +27,7 @@ describe("Functions in prometheus-service", function () {
           prometheusUrl: "http://localhost:8080/",
           updateInterval: 1000
         },
-        new Logger("TEST", undefined)
+        new LogWrapper("TEST", undefined)
       );
 
       expect(service.checkFetchStatus(testResponse)).toBe(testResponse);

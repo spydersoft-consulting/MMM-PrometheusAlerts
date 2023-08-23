@@ -1,15 +1,12 @@
 import { ModuleNotification } from "./constants/ModuleNotification";
 import { DataConfig, isDataConfig } from "./types/config";
 import { Summary } from "./types/transfer-types";
-import { Logger } from "./utilities/logging";
+import { LogWrapper } from "./utilities/logging";
 import { PrometheusService } from "./backend/prometheus-service";
+import * as Log from "logger";
+import * as NodeHelper from "node_helper";
 
-/* eslint-disable @typescript-eslint/no-var-requires */
-const Log = require("logger");
-const NodeHelper = require("node_helper");
-/* eslint-enable @typescript-eslint/no-var-requires */
-
-const logger = new Logger("MMM-PrometheusAlerts", Log);
+const logger = new LogWrapper("MMM-PrometheusAlerts", Log);
 
 module.exports = NodeHelper.create({
   service: {} as PrometheusService,
@@ -18,7 +15,7 @@ module.exports = NodeHelper.create({
     logger.info("Starting node_helper for: " + this.name);
   },
 
-  socketNotificationReceived: function (notification: ModuleNotification, payload: unknown) {
+  socketNotificationReceived: function (notification: string, payload: unknown) {
     //const self = this;
     logger.info(`Processing ${notification} notification`);
 
@@ -38,7 +35,7 @@ module.exports = NodeHelper.create({
           if (response) {
             this.sendSocketNotification(ModuleNotification.RESULTS, response);
           } else {
-            this.sendSocketNotification(ModuleNotification.ERROR);
+            this.sendSocketNotification(ModuleNotification.ERROR, {});
           }
         });
       }

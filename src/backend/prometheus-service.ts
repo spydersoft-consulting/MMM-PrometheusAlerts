@@ -3,14 +3,14 @@ import fetch, { Response } from "node-fetch";
 import { formatDistanceToNow, toDate } from "date-fns";
 import { PrometheusAlert } from "../types/prometheus";
 import { Alert, Summary } from "../types/transfer-types";
-import { Logger } from "../utilities/logging";
+import { LogWrapper } from "../utilities/logging";
 
 export class PrometheusService {
   pending: boolean = false;
   dataConfig: DataConfig;
-  logger: Logger;
+  logger: LogWrapper;
 
-  constructor(config: DataConfig, logger: Logger) {
+  constructor(config: DataConfig, logger: LogWrapper) {
     this.dataConfig = config;
     this.logger = logger;
   }

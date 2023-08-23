@@ -2,7 +2,8 @@ import { ModuleNotification } from "./constants/ModuleNotification";
 import { getLoadingView, getSummaryView } from "./frontend/summary";
 import { Config } from "./types/config";
 import { Summary } from "./types/transfer-types";
-import { Logger } from "./utilities/logging";
+import { LogWrapper } from "./utilities/logging";
+import * as Log from "logger";
 
 import "./frontend/summary.scss";
 
@@ -18,9 +19,11 @@ Module.register<Config>("MMM-PrometheusAlerts", {
     updateInterval: 2 * 60 * 1000 // 2 minutes
   },
 
-  getLogger: function (): Logger {
-    return new Logger("MMM-PrometheusAlerts module", Log);
+  getLogger: function (): LogWrapper {
+    return new LogWrapper("MMM-PrometheusAlerts module", Log);
   },
+
+  isLoaded: false,
 
   requiresVersion: "2.1.0",
 
@@ -53,14 +56,14 @@ Module.register<Config>("MMM-PrometheusAlerts", {
     }, nextLoad);
   },
 
-  socketNotificationReceived: function (notification: ModuleNotification, payload) {
+  socketNotificationReceived: function (notification: string, payload) {
     this.getLogger().info("socket notification received ", notification);
     if (notification === ModuleNotification.RESULTS) {
       const summary: Summary = payload as Summary;
       if (summary) {
         this.summaryData = summary;
         this.getLogger().info(`Processing Alert Data: Alert Count = ${summary.alerts.length}`, this.summaryData);
-        this.loaded = true;
+        this.isLoaded = true;
         this.scheduleUpdate();
         this.updateDom(this.config.animationSpeed);
       } else {
@@ -74,7 +77,7 @@ Module.register<Config>("MMM-PrometheusAlerts", {
   },
 
   getDom: function () {
-    if (!this.loaded) {
+    if (!this.isLoaded) {
       return getLoadingView(this.config);
     }
     return getSummaryView(this.summaryData, this.config);
