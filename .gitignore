@@ -65,6 +65,8 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
+.eslintcache
+
 # Various Linux ignoramuses.
 .fuse_hidden*
 .directory
@@ -73,5 +75,7 @@ Temporary Items
 
 .vscode/*
 
+# Ignore rollup output
 MMM-PrometheusAlerts.js
 node_helper.js
+MMM-PrometheusAlerts.css

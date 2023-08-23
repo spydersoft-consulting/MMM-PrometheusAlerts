@@ -2,6 +2,7 @@
 import commonjs from '@rollup/plugin-commonjs';
 import resolve from '@rollup/plugin-node-resolve';
 import typescript from '@rollup/plugin-typescript';
+import scss from 'rollup-plugin-scss'
 
 // const bannerText = [
 //     'EdgeRouter Throughput',
@@ -21,7 +22,10 @@ export default [
         plugins: [
             typescript(),
             resolve(),
-            commonjs()
+            commonjs(),
+            scss({
+                fileName: 'MMM-PrometheusAlerts.css'
+            })
         ],
         output: {
             file: './MMM-PrometheusAlerts.js',

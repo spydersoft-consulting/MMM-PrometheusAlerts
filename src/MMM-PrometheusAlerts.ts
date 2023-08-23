@@ -4,6 +4,8 @@ import { Config } from "./types/config";
 import { Summary } from "./types/transfer-types";
 import { Logger } from "./utilities/logging";
 
+import "./frontend/summary.scss";
+
 Module.register<Config>("MMM-PrometheusAlerts", {
   // Module config defaults.           // Make all changes in your config.js file
   defaults: {
