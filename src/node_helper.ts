@@ -1,4 +1,4 @@
-import { ModuleNotification } from "./constants/ModuleNotification";
+import { ModuleNotification } from "./types/ModuleNotification";
 import { DataConfig, isDataConfig } from "./types/config";
 import { Summary } from "./types/transfer-types";
 import { LogWrapper } from "./utilities/logging";

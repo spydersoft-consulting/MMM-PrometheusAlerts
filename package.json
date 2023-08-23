@@ -30,10 +30,6 @@
 	"bugs": {
 		"url": "https://github.com/spyder007/MMM-PrometheusAlerts.git/issues"
 	},
-	"_moduleAliases": {
-		"@mm_node_helper": "../MagicMirror/js/node_helper.js",
-		"@mm_logger": "../MagicMirror/js/logger.js"
-	},
 	"homepage": "https://github.com/spyder007/MMM-PrometheusAlerts.git#readme",
 	"devDependencies": {
 		"@babel/core": "^7.22.10",
@@ -63,7 +59,6 @@
 		"typescript": "^5.1.6"
 	},
 	"dependencies": {
-		"date-fns": "^2.30.0",
-		"module-alias": "^2.2.3"
+		"date-fns": "^2.30.0"
 	}
 }

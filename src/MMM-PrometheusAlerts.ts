@@ -1,4 +1,4 @@
-import { ModuleNotification } from "./constants/ModuleNotification";
+import { ModuleNotification } from "./types/ModuleNotification";
 import { getLoadingView, getSummaryView } from "./frontend/summary";
 import { Config } from "./types/config";
 import { Summary } from "./types/transfer-types";
