@@ -1,0 +1,58 @@
+ .MMM-PrometheusAlerts {
+     font-family: "Roboto Condensed", sans-serif;
+     color: #ffffff;
+     /* Color the ID #. Default is white. */
+     font-size: 16px;
+
+     /* Adjust to your liking, line by line */
+     .header {
+         color: #aaa;
+         /* Color the title text. Default is white. */
+         font-size: 20px;
+         font-weight: 700;
+     }
+
+     .state-none {
+         color: #008000;
+     }
+
+     .state-pending {
+         color: #ffa500;
+     }
+
+     .state-firing {
+         color: #ff0000;
+     }
+ }
+
+ .prom-alert-wrapper {
+     border-bottom: 0.5px solid #666;
+     padding: 10px 0;
+     display: flex;
+     align-items: center;
+
+     :last-child {
+         border: none;
+     }
+
+     .status-wrapper {
+         font-size: 50px;
+         max-width: 50px;
+         display: flex;
+         line-height: 1;
+         justify-content: space-around;
+         align-items: center;
+         flex-direction: column;
+         flex-basis: 20%;
+
+         .fa {
+             font-size: 40px;
+         }
+     }
+
+     .data-wrapper {
+         text-align: left;
+         margin-left: 15px;
+         overflow: hidden;
+     }
+ }

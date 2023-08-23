@@ -48,9 +48,11 @@ Scan through our [existing issues](https://github.com/spyder007/MMM-PrometheusAl
 - Using the command line:
   - [Fork the repo](https://docs.github.com/en/github/getting-started-with-github/fork-a-repo#fork-an-example-repository) so that you can make your changes without affecting the original project until you're ready to merge them.
 
-1. Install or update to **Node.js v16**.
+3. Install or update to **Node.js v18**.
 
-2. Create a working branch and start with your changes!
+4. Clone your forked repository. In order to test locally, clone your repository into the `modules` folder of the MagicMirror repository.
+
+5. Create a working branch and start with your changes!
 
 ### Commit your update
 
@@ -63,6 +65,9 @@ Commit the changes once you are happy with them. Don't forget to run the linting
 npm run lint:js
 # Run Prettier on all files
 npm run lint:prettier
+
+# run everything above - *** Recommended before commit ***
+npm run lint
 ```
 
 #### Test Commands
@@ -82,6 +87,19 @@ npm run test:js
 
 ```
 
+#### Build Commands
+
+This module is written and tested using Typescript and SCSS, however, to be used by MagicMirror, `rollup` must execute and create the necessary Javascript and CSS files for the module and the `node_helper`.
+
+This is all encapsulated in the build command:
+
+```bash
+# build module JS files from typescript
+npm run build
+```
+
+You can use `npm run dev` to build with inline source maps, and `npm run watch` to build (and rebuild) on changes.
+
 ### Pull Request
 
 When you're finished with the changes, create a pull request, also known as a PR.
@@ -97,4 +115,4 @@ When you're finished with the changes, create a pull request, also known as a PR
 
 Congratulations :tada::tada: We thank you for your contribution.
 
-Once your PR is merged, your updates are available in MagicMirror by pulling the latest code from the `main` branch in this repository into your Magic Mirror `modules` folder.
+Once your PR is merged, your updates are available in MagicMirror by pulling the latest code from the `main` branch in this repository into your Magic Mirror `modules` folder and running `npm install`

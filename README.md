@@ -29,10 +29,10 @@ Go to the modules folder:
 cd MMM-PrometheusAlerts
 ```
 
-Install the dependencies:
+Install the dependencies and transpile the Typescript:
 
 ```bash
-npm install --production
+npm install
 ```
 
 Add the module to the modules array in the `config/config.js` file:
