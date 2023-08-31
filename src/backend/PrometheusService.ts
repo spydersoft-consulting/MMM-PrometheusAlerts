@@ -1,9 +1,9 @@
-import { DataConfig } from "../types/config";
+import { DataConfig } from "../types/Config";
 import fetch, { Response } from "node-fetch";
 import { formatDistanceToNow, toDate } from "date-fns";
-import { PrometheusAlert } from "../types/prometheus";
-import { Alert, Summary } from "../types/transfer-types";
-import { LogWrapper } from "../utilities/logging";
+import { PrometheusAlert } from "../types/Prometheus";
+import { Alert, Summary } from "../types/Display";
+import { LogWrapper } from "../utilities/LogWrapper";
 
 export class PrometheusService {
   pending: boolean = false;

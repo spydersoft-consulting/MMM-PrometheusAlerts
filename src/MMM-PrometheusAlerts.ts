@@ -1,11 +1,11 @@
 import { ModuleNotification } from "./types/ModuleNotification";
-import { getLoadingView, getSummaryView } from "./frontend/summary";
-import { Config } from "./types/config";
-import { Summary } from "./types/transfer-types";
-import { LogWrapper } from "./utilities/logging";
+import { getLoadingView, getSummaryView } from "./frontend/Display";
+import { Config } from "./types/Config";
+import { Summary } from "./types/Display";
+import { LogWrapper } from "./utilities/LogWrapper";
 import * as Log from "logger";
 
-import "./frontend/summary.scss";
+import "./frontend/Display.scss";
 
 Module.register<Config>("MMM-PrometheusAlerts", {
   // Module config defaults.           // Make all changes in your config.js file

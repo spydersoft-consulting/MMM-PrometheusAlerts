@@ -79,3 +79,6 @@ Temporary Items
 MMM-PrometheusAlerts.js
 node_helper.js
 MMM-PrometheusAlerts.css
+
+output/*
+junit.xml

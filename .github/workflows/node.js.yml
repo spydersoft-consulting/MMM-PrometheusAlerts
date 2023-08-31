@@ -5,7 +5,9 @@ name: Tests
 
 on:
   push:
-    branches: [main]
+    # run builds on every branch, and PRs to main.
+    branches:
+      - "**"
   pull_request:
     branches: [main]
 
@@ -15,17 +17,17 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [16.x, 17.x, 18.x]
+        node-version: [16.x, 18.x, 20.x]
 
     steps:
       - name: Checkout MagicMirror repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           repository: MichMich/MagicMirror
           path: MagicMirror
 
       - name: Checkout Module repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           path: MagicMirror/modules/MMM-PrometheusAlerts
 
@@ -44,5 +46,13 @@ jobs:
       - name: Run tests
         run: |
           cd MagicMirror/modules/MMM-PrometheusAlerts
-          npm ci
-          npm run test
+          npm install
+          npm run test-ci
+      - name: SonarQube Scan
+        uses: sonarsource/sonarcloud-github-action@master
+        if: ${{ matrix.node-version == '20.x' }}
+        with:
+          projectBaseDir: MagicMirror/modules/MMM-PrometheusAlerts
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
