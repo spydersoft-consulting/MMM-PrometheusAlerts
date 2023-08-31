@@ -1,8 +1,8 @@
 import { Response } from "node-fetch";
-import { LogWrapper } from "../utilities/logging";
-import { PrometheusService } from "./prometheus-service";
+import { LogWrapper } from "../utilities/LogWrapper";
+import { PrometheusService } from "./PrometheusService";
 
-jest.mock("../utilities/logging", () => {
+jest.mock("../utilities/LogWrapper", () => {
   return {
     LogWrapper: jest.fn().mockImplementation(() => {
       return {

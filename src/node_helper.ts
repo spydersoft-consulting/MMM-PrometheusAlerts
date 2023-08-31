@@ -1,8 +1,8 @@
 import { ModuleNotification } from "./types/ModuleNotification";
-import { DataConfig, isDataConfig } from "./types/config";
-import { Summary } from "./types/transfer-types";
-import { LogWrapper } from "./utilities/logging";
-import { PrometheusService } from "./backend/prometheus-service";
+import { DataConfig, isDataConfig } from "./types/Config";
+import { Summary } from "./types/Display";
+import { LogWrapper } from "./utilities/LogWrapper";
+import { PrometheusService } from "./backend/PrometheusService";
 import * as Log from "logger";
 import * as NodeHelper from "node_helper";
 

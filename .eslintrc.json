@@ -1,6 +1,6 @@
 {
-	"extends": ["eslint:recommended", "prettier", "plugin:@typescript-eslint/recommended"],
-	"plugins": ["@typescript-eslint"],
+	"extends": ["eslint:recommended", "prettier", "plugin:@typescript-eslint/recommended", "plugin:sonarjs/recommended"],
+	"plugins": ["@typescript-eslint", "sonarjs"],
 	"root": true,
 	"env": {
 		"browser": true,

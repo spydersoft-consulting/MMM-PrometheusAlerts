@@ -1,5 +1,5 @@
-import { AppearanceConfig } from "../types/config";
-import { Alert, Summary } from "../types/transfer-types";
+import { AppearanceConfig } from "../types/Config";
+import { Alert, Summary } from "../types/Display";
 
 const getAlertCard = (alert: Alert): HTMLElement => {
   const card = document.createElement("div");
@@ -55,7 +55,7 @@ const getWrapperElement = (config: AppearanceConfig): HTMLElement => {
 
 export const getLoadingView = (config: AppearanceConfig): HTMLElement => {
   const wrapper = getWrapperElement(config);
-  wrapper.innerHTML = "Prometheus Alerts";
+  wrapper.innerHTML = config.headerText ?? "Prometheus Alerts";
   wrapper.classList.add("bright", "light", "small");
   return wrapper;
 };
