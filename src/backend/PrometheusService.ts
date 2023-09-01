@@ -2,7 +2,7 @@ import { DataConfig } from "../types/Config";
 import fetch, { Response } from "node-fetch";
 import { formatDistanceToNow, toDate } from "date-fns";
 import { PrometheusAlert } from "../types/Prometheus";
-import { Alert, Summary } from "../types/Display";
+import * as Display from "../types/Display";
 import { LogWrapper } from "../utilities/LogWrapper";
 
 export class PrometheusService {
@@ -15,7 +15,7 @@ export class PrometheusService {
     this.logger = logger;
   }
 
-  async getPrometheusAlerts(): Promise<Summary | undefined> {
+  async getPrometheusAlerts(): Promise<Display.Summary | undefined> {
     if (this.pending) {
       return;
     }
@@ -27,20 +27,20 @@ export class PrometheusService {
       .then(this.checkFetchStatus)
       .then((response) => response.json())
       .then((responseData) => {
-        const alerts: Alert[] = [];
+        const alerts: Display.Alert[] = [];
         responseData.data.alerts.forEach((alert: PrometheusAlert) => {
           const activeAt: Date = toDate(Date.parse(alert.activeAt));
           alerts.push({
             labels: alert.labels,
             annotations: alert.annotations,
-            state: alert.state,
+            state: alert.state as Display.AlertState,
             value: alert.value,
             age: formatDistanceToNow(activeAt, {}),
             activeAt: activeAt
           });
         });
 
-        const summaryData: Summary = {
+        const summaryData: Display.Summary = {
           title: "Alerts",
           alerts: alerts
         };
