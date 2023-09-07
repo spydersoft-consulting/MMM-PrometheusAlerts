@@ -1,7 +1,7 @@
 import { AppearanceConfig } from "../types/Config";
-import { Alert, Summary } from "../types/Display";
+import { Alert, Summary, AlertState } from "../types/Display";
 
-const getAlertCard = (alert: Alert): HTMLElement => {
+export const getAlertCard = (alert: Alert): HTMLElement => {
   const card = document.createElement("div");
   card.classList.add("prom-alert-wrapper");
 
@@ -14,7 +14,7 @@ const getAlertCard = (alert: Alert): HTMLElement => {
   card.appendChild(dataWrapper);
 
   // Icon
-  dateWrapper.appendChild(getAlertStatusIcon(alert));
+  dateWrapper.appendChild(getAlertStatusIcon(alert.state));
 
   const title = document.createElement("div");
   title.classList.add("small", "bright", "no-wrap", "title");
@@ -29,19 +29,22 @@ const getAlertCard = (alert: Alert): HTMLElement => {
   return card;
 };
 
-const getAlertStatusIcon = (alert: Alert): HTMLElement => {
+export const getAlertStatusIcon = (state: AlertState): HTMLElement => {
   const icon = document.createElement("i");
   let iconName = "";
-  switch (alert.state) {
-    case "pending":
+  switch (state) {
+    case AlertState.PENDING:
       iconName = "exclamation-triangle";
       break;
-    case "firing":
+    case AlertState.FIRING:
       iconName = "exclamation-circle";
+      break;
+    case AlertState.RESOLVED:
+      iconName = "check";
       break;
   }
 
-  icon.classList.add("fa", "fa-fw", `fa-${iconName}`, "state-" + alert.state);
+  icon.classList.add("fa", "fa-fw", `fa-${iconName}`, `state-${state}`);
   return icon;
 };
 

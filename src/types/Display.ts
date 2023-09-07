@@ -1,7 +1,13 @@
+export enum AlertState {
+  PENDING = "pending",
+  FIRING = "firing",
+  RESOLVED = "resolved"
+}
+
 export type Alert = {
   labels: Record<string, string>;
   annotations: Record<string, string>;
-  state: string;
+  state: AlertState;
   activeAt: Date;
   age: string;
   value: number;

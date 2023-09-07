@@ -16,7 +16,6 @@ module.exports = NodeHelper.create({
   },
 
   socketNotificationReceived: function (notification: string, payload: unknown) {
-    //const self = this;
     logger.info(`Processing ${notification} notification`);
 
     if (notification === ModuleNotification.CONFIG) {
