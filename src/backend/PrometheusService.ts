@@ -1,7 +1,7 @@
 import { DataConfig } from "../types/Config";
 import fetch, { Response } from "node-fetch";
 import { formatDistanceToNow, toDate } from "date-fns";
-import { PrometheusAlert } from "../types/Prometheus";
+import { AlertResponse, PrometheusAlert } from "../types/Prometheus";
 import * as Display from "../types/Display";
 import { LogWrapper } from "../utilities/LogWrapper";
 
@@ -26,7 +26,7 @@ export class PrometheusService {
     })
       .then(this.checkFetchStatus)
       .then((response) => response.json())
-      .then((responseData) => {
+      .then((responseData: AlertResponse) => {
         const alerts: Display.Alert[] = [];
         responseData.data.alerts.forEach((alert: PrometheusAlert) => {
           const activeAt: Date = toDate(Date.parse(alert.activeAt));
