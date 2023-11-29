@@ -19,7 +19,7 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/spyder007/MMM-PrometheusAlerts.git"
+		"url": "git+https://github.com/spydersoft-consulting/MMM-PrometheusAlerts.git"
 	},
 	"keywords": [
 		"MagicMirror",
@@ -29,9 +29,9 @@
 	"author": "Matt Gerega",
 	"license": "MIT",
 	"bugs": {
-		"url": "https://github.com/spyder007/MMM-PrometheusAlerts.git/issues"
+		"url": "https://github.com/spydersoft-consulting/MMM-PrometheusAlerts.git/issues"
 	},
-	"homepage": "https://github.com/spyder007/MMM-PrometheusAlerts.git#readme",
+	"homepage": "https://github.com/spydersoft-consulting/MMM-PrometheusAlerts.git#readme",
 	"devDependencies": {
 		"@babel/core": "^7.23.2",
 		"@babel/preset-env": "^7.23.2",

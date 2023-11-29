@@ -3,9 +3,9 @@
 A [MagicMirror²](https://magicmirror.builders) helper module to display Prometheus alerts from a Prometheus-compatible implementation.
 
 [![Platform](https://img.shields.io/badge/platform-MagicMirror-informational)](https://MagicMirror.builders)
-[![license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://raw.githubusercontent.com/spyder007/MMM-PrometheusAlerts/master/LICENSE)
-![Test Status](https://github.com/spyder007/MMM-PrometheusAlerts/actions/workflows/node.js.yml/badge.svg)
-[![Known Vulnerabilities](https://snyk.io/test/github/spyder007/MMM-PrometheusAlerts/badge.svg)](https://snyk.io/test/github/spyder007/MMM-PrometheusAlerts)
+[![license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://raw.githubusercontent.com/spydersoft-consulting/MMM-PrometheusAlerts/master/LICENSE)
+![Test Status](https://github.com/spydersoft-consulting/MMM-PrometheusAlerts/actions/workflows/node.js.yml/badge.svg)
+[![Known Vulnerabilities](https://snyk.io/test/github/spydersoft-consulting/MMM-PrometheusAlerts/badge.svg)](https://snyk.io/test/github/spydersoft-consulting/MMM-PrometheusAlerts)
 
 ![Example Scheduling](.github/example-screenshot.png)
 
@@ -20,7 +20,7 @@ cd ~/MagicMirror/modules
 Clone this repository:
 
 ```bash
-git clone https://github.com/spyder007/MMM-PrometheusAlerts.git
+git clone https://github.com/spydersoft-consulting/MMM-PrometheusAlerts.git
 ```
 
 Go to the modules folder:
