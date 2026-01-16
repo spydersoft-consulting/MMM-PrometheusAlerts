@@ -1,6 +1,6 @@
-import { DataConfig } from "../types/Config";
+import { DataConfig, PrometheusInstance } from "../types/Config";
 import fetch, { Response } from "node-fetch";
-import { formatDistanceToNow, toDate } from "date-fns";
+import { formatDistanceToNow } from "date-fns";
 import { AlertResponse, PrometheusAlert } from "../types/Prometheus";
 import * as Display from "../types/Display";
 import { LogWrapper } from "../utilities/LogWrapper";
@@ -20,41 +20,60 @@ export class PrometheusService {
       return;
     }
     this.pending = true;
-    const url = this.dataConfig.prometheusUrl + "/api/v1/alerts";
-    return fetch(url, {
-      method: "get"
-    })
-      .then(this.checkFetchStatus)
-      .then((response) => response.json())
-      .then((responseData: AlertResponse) => {
-        const alerts: Display.Alert[] = [];
-        responseData.data.alerts.forEach((alert: PrometheusAlert) => {
-          const activeAt: Date = toDate(Date.parse(alert.activeAt));
-          alerts.push({
-            labels: alert.labels,
-            annotations: alert.annotations,
-            state: alert.state as Display.AlertState,
-            value: alert.value,
-            age: formatDistanceToNow(activeAt, {}),
-            activeAt: activeAt
-          });
-        });
 
-        const summaryData: Display.Summary = {
-          title: "Alerts",
-          alerts: alerts
-        };
+    try {
+      const alertPromises = this.dataConfig.instances.map((instance) => this.fetchAlertsFromInstance(instance));
 
-        this.logger.info(`Sending Summary Data: Alert Count = ${summaryData.alerts.length}`);
-        return summaryData;
-      })
-      .catch((error) => {
-        this.logger.error(error);
-        return undefined;
-      })
-      .finally(() => {
-        this.pending = false;
+      const alertsFromAllInstances = await Promise.all(alertPromises);
+      const allAlerts: Display.Alert[] = alertsFromAllInstances.filter((alerts) => alerts !== undefined).flat() as Display.Alert[];
+
+      const summaryData: Display.Summary = {
+        title: "Alerts",
+        alerts: allAlerts
+      };
+
+      this.logger.info(`Sending Summary Data: Alert Count = ${summaryData.alerts.length}`);
+      return summaryData;
+    } catch (error) {
+      this.logger.error(String(error));
+      return undefined;
+    } finally {
+      this.pending = false;
+    }
+  }
+
+  private async fetchAlertsFromInstance(instance: PrometheusInstance): Promise<Display.Alert[] | undefined> {
+    const url = instance.url + "/api/v1/alerts";
+    const headers = instance.headers || {};
+
+    try {
+      const response = await fetch(url, {
+        method: "get",
+        headers: headers
       });
+
+      this.checkFetchStatus(response);
+      const responseData = (await response.json()) as AlertResponse;
+      const alerts: Display.Alert[] = [];
+
+      responseData.data.alerts.forEach((alert: PrometheusAlert) => {
+        const activeAt: Date = new Date(Date.parse(alert.activeAt));
+        alerts.push({
+          labels: alert.labels,
+          annotations: alert.annotations,
+          state: alert.state as Display.AlertState,
+          value: alert.value,
+          age: formatDistanceToNow(activeAt, {}),
+          activeAt: activeAt
+        });
+      });
+
+      this.logger.info(`Fetched ${alerts.length} alerts from ${instance.url}`);
+      return alerts;
+    } catch (error) {
+      this.logger.error(`Error fetching from ${instance.url}: ${error}`);
+      return undefined;
+    }
   }
 
   checkFetchStatus(response: Response) {
