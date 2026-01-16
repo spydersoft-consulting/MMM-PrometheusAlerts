@@ -45,14 +45,23 @@ Add the module to the modules array in the `config/config.js` file:
 
 ## Config Options
 
-| **Option**         | **Default**     | **Description**                                                               |
-| ------------------ | --------------- | ----------------------------------------------------------------------------- |
-| `prometheusUrl`    | ''              | The URL of the Prometheus Instance.                                           |
-| `animationSpeed`   | 3000            | **Optional** The speed of the show and hide animations in milliseconds        |
-| `useHeader`        | `true`          | **Optional** Whether or not to show the header                                |
-| `maxWidth`         | `300px`         | **Optional** The maximum width for this module                                |
-| `initialLoadDelay` | `3250`          | **Optional** How long to wait, in milliseconds, before the first status check |
-| `updateInterval`   | `2 * 60 * 1000` | **Optional** How often to check the status (defaults to 2 minutes)            |
+| **Option**         | **Default**     | **Description**                                                                                                                            |
+| ------------------ | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| `instances`        | `[]`            | An array of Prometheus instances to query. Each instance should have a `url` property and optionally `headers` for custom request headers. |
+| `updateInterval`   | `2 * 60 * 1000` | **Optional** How often to check the status across all instances (defaults to 2 minutes)                                                    |
+| `animationSpeed`   | 3000            | **Optional** The speed of the show and hide animations in milliseconds                                                                     |
+| `useHeader`        | `true`          | **Optional** Whether or not to show the header                                                                                             |
+| `maxWidth`         | `300px`         | **Optional** The maximum width for this module                                                                                             |
+| `initialLoadDelay` | `3250`          | **Optional** How long to wait, in milliseconds, before the first status check                                                              |
+
+### Instance Configuration
+
+Each instance in the `instances` array supports:
+
+| **Property** | **Type**                 | **Required** | **Description**                                                             |
+| ------------ | ------------------------ | ------------ | --------------------------------------------------------------------------- |
+| `url`        | `string`                 | Yes          | The URL of the Prometheus instance                                          |
+| `headers`    | `Record<string, string>` | No           | Custom headers to include in requests (e.g., `{"X-Scope-OrgId": "team-a"}`) |
 
 ## Config Examples
 
@@ -63,7 +72,40 @@ Add the module to the modules array in the `config/config.js` file:
       module: "MMM-PrometheusAlerts",
       position: "bottom_right",
       config: {
-        prometheusUrl: "https//prometheus.mydomain.com"
+        instances: [
+          {
+            url: "https://prometheus.mydomain.com"
+          }
+        ]
+      }
+    },
+```
+
+### Multiple Instances with Custom Headers
+
+```javascript
+    {
+      module: "MMM-PrometheusAlerts",
+      position: "bottom_right",
+      config: {
+        instances: [
+          {
+            url: "https://prometheus-team-a.mydomain.com",
+            headers: {
+              "X-Scope-OrgId": "team-a"
+            }
+          },
+          {
+            url: "https://prometheus-team-b.mydomain.com",
+            headers: {
+              "X-Scope-OrgId": "team-b",
+              "Authorization": "Bearer my-token"
+            }
+          }
+        ],
+        updateInterval: 60000, // Check every minute
+        useHeader: true,
+        maxWidth: "400px"
       }
     },
 ```
@@ -79,6 +121,46 @@ npm install
 
 If you haven't changed the modules, this should work without any problems.
 Type `git status` to see your changes, if there are any, you can reset them with `git reset --hard`. After that, git pull should be possible.
+
+### Breaking Changes - Migration Guide
+
+**Version 2.0+ introduces a new configuration structure** to support multiple Prometheus instances. If you're upgrading from an earlier version, you'll need to update your config:
+
+**Old Configuration (v1.x):**
+
+```javascript
+{
+  module: "MMM-PrometheusAlerts",
+  position: "bottom_right",
+  config: {
+    prometheusUrl: "https://prometheus.mydomain.com",
+    updateInterval: 120000
+  }
+}
+```
+
+**New Configuration (v2.0+):**
+
+```javascript
+{
+  module: "MMM-PrometheusAlerts",
+  position: "bottom_right",
+  config: {
+    instances: [
+      {
+        url: "https://prometheus.mydomain.com"
+      }
+    ],
+    updateInterval: 120000
+  }
+}
+```
+
+**Key Changes:**
+
+- `prometheusUrl` is now `url` inside an `instances` array
+- `updateInterval` moved from per-instance to a global configuration
+- Added support for custom `headers` per instance (optional)
 
 ## Contributing
 

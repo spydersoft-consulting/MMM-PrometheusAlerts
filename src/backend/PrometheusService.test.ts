@@ -24,7 +24,11 @@ describe("Functions in prometheus-service", function () {
       });
       const service = new PrometheusService(
         {
-          prometheusUrl: "http://localhost:8080/",
+          instances: [
+            {
+              url: "http://localhost:8080"
+            }
+          ],
           updateInterval: 1000
         },
         new LogWrapper("TEST", undefined)

@@ -10,13 +10,13 @@ import "./frontend/Display.scss";
 Module.register<Config>("MMM-PrometheusAlerts", {
   // Module config defaults.           // Make all changes in your config.js file
   defaults: {
-    prometheusUrl: "",
+    instances: [],
+    updateInterval: 2 * 60 * 1000, // 2 minutes
     useHeader: true, // false if you don't want a header
     headerText: undefined,
     maxWidth: "300px",
     animationSpeed: 1000, // fade speed
-    initialLoadDelay: 1500,
-    updateInterval: 2 * 60 * 1000 // 2 minutes
+    initialLoadDelay: 1500
   },
 
   getLogger: function (): LogWrapper {
