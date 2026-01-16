@@ -40,9 +40,7 @@ Scan through our [existing issues](https://github.com/spydersoft-consulting/MMM-
 1. [Install and Configure](https://docs.magicmirror.builders/getting-started/installation.html) an instance of MagicMirror for testing. It is very helpful to read and understand [Module Development](https://docs.magicmirror.builders/development/introduction.html) in Magic Mirror.
 
 2. Fork the repository
-
    - Using GitHub Desktop:
-
      - [Getting started with GitHub Desktop](https://docs.github.com/en/desktop/installing-and-configuring-github-desktop/getting-started-with-github-desktop) will guide you through setting up Desktop.
      - Once Desktop is set up, you can use it to [fork the repo](https://docs.github.com/en/desktop/contributing-and-collaborating-using-github-desktop/cloning-and-forking-repositories-from-github-desktop)!
 
