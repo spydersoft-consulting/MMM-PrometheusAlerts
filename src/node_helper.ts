@@ -4,7 +4,7 @@ import { Summary } from "./types/Display";
 import { LogWrapper } from "./utilities/LogWrapper";
 import { PrometheusService } from "./backend/PrometheusService";
 import * as Log from "logger";
-import * as NodeHelper from "node_helper";
+import NodeHelper from "node_helper";
 
 const logger = new LogWrapper("MMM-PrometheusAlerts", Log);
 

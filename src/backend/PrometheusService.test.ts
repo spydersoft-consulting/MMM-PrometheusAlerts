@@ -1,6 +1,7 @@
 import { Response } from "node-fetch";
 import { LogWrapper } from "../utilities/LogWrapper";
-import { PrometheusService } from "./PrometheusService";
+import { PrometheusService, normalizeAlertState } from "./PrometheusService";
+import { AlertState } from "../types/Display";
 
 jest.mock("../utilities/LogWrapper", () => {
   return {
@@ -35,6 +36,23 @@ describe("Functions in prometheus-service", function () {
       );
 
       expect(service.checkFetchStatus(testResponse)).toBe(testResponse);
+    });
+  });
+
+  describe("normalizeAlertState", function () {
+    it.each([
+      ["firing", AlertState.FIRING],
+      ["pending", AlertState.PENDING],
+      ["Alerting", AlertState.FIRING],
+      ["Pending", AlertState.PENDING],
+      ["Alerting (NoData)", AlertState.FIRING],
+      ["Pending (Error)", AlertState.PENDING]
+    ])(`maps raw state %s to %s`, function (rawState, expected) {
+      expect(normalizeAlertState(rawState)).toBe(expected);
+    });
+
+    it.each(["Normal", "Normal (NoData)", "inactive", "Normal (Error)"])(`filters out non-alerting state %s`, function (rawState) {
+      expect(normalizeAlertState(rawState)).toBeUndefined();
     });
   });
 });
