@@ -1,6 +1,7 @@
-import { Response } from "node-fetch";
+import fetch, { Response } from "node-fetch";
 import { LogWrapper } from "../utilities/LogWrapper";
-import { PrometheusService } from "./PrometheusService";
+import { PrometheusService, normalizeAlertState } from "./PrometheusService";
+import { AlertState } from "../types/Display";
 
 jest.mock("../utilities/LogWrapper", () => {
   return {
@@ -15,6 +16,14 @@ jest.mock("../utilities/LogWrapper", () => {
     })
   };
 });
+
+jest.mock("node-fetch", () => ({
+  __esModule: true,
+  ...jest.requireActual("node-fetch"),
+  default: jest.fn()
+}));
+
+const mockedFetch = fetch as unknown as jest.Mock;
 
 describe("Functions in prometheus-service", function () {
   describe("checkFetchStatus", function () {
@@ -35,6 +44,75 @@ describe("Functions in prometheus-service", function () {
       );
 
       expect(service.checkFetchStatus(testResponse)).toBe(testResponse);
+    });
+  });
+
+  describe("normalizeAlertState", function () {
+    it.each([
+      ["firing", AlertState.FIRING],
+      ["pending", AlertState.PENDING],
+      ["Alerting", AlertState.FIRING],
+      ["Pending", AlertState.PENDING],
+      ["Alerting (NoData)", AlertState.FIRING],
+      ["Pending (Error)", AlertState.PENDING]
+    ])(`maps raw state %s to %s`, function (rawState, expected) {
+      expect(normalizeAlertState(rawState)).toBe(expected);
+    });
+
+    it.each(["Normal", "Normal (NoData)", "inactive", "Normal (Error)"])(`filters out non-alerting state %s`, function (rawState) {
+      expect(normalizeAlertState(rawState)).toBeUndefined();
+    });
+  });
+
+  describe("getPrometheusAlerts", function () {
+    afterEach(function () {
+      mockedFetch.mockReset();
+    });
+
+    it(`filters out non-alerting states and maps the rest`, async function () {
+      mockedFetch.mockResolvedValueOnce(
+        new Response(
+          JSON.stringify({
+            data: {
+              alerts: [
+                { labels: { alertname: "A" }, annotations: {}, state: "firing", activeAt: "2026-01-01T00:00:00Z", value: 1 },
+                { labels: { alertname: "B" }, annotations: {}, state: "Normal (NoData)", activeAt: "2026-01-01T00:00:00Z", value: 0 },
+                { labels: { alertname: "C" }, annotations: {}, state: "Pending", activeAt: "2026-01-01T00:00:00Z", value: 0 }
+              ]
+            }
+          }),
+          { status: 200 }
+        )
+      );
+
+      const service = new PrometheusService(
+        {
+          instances: [{ url: "http://localhost:8080" }],
+          updateInterval: 1000
+        },
+        new LogWrapper("TEST", undefined)
+      );
+
+      const summary = await service.getPrometheusAlerts();
+
+      expect(summary?.alerts.map((alert) => alert.labels.alertname)).toEqual(["A", "C"]);
+      expect(summary?.alerts.map((alert) => alert.state)).toEqual([AlertState.FIRING, AlertState.PENDING]);
+    });
+
+    it(`returns an empty alert list when the request fails`, async function () {
+      mockedFetch.mockResolvedValueOnce(new Response("", { status: 500, statusText: "Internal Server Error" }));
+
+      const service = new PrometheusService(
+        {
+          instances: [{ url: "http://localhost:8080" }],
+          updateInterval: 1000
+        },
+        new LogWrapper("TEST", undefined)
+      );
+
+      const summary = await service.getPrometheusAlerts();
+
+      expect(summary?.alerts).toHaveLength(0);
     });
   });
 });

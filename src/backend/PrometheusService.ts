@@ -5,6 +5,21 @@ import { AlertResponse, PrometheusAlert } from "../types/Prometheus";
 import * as Display from "../types/Display";
 import { LogWrapper } from "../utilities/LogWrapper";
 
+// Grafana's compatible endpoint returns every rule (e.g. "Normal (NoData)", "Alerting"); undefined means "not actively pending/firing", so callers filter it out.
+export const normalizeAlertState = (rawState: string): Display.AlertState | undefined => {
+  const baseState = rawState.split(" ")[0].toLowerCase();
+
+  switch (baseState) {
+    case "firing":
+    case "alerting":
+      return Display.AlertState.FIRING;
+    case "pending":
+      return Display.AlertState.PENDING;
+    default:
+      return undefined;
+  }
+};
+
 export class PrometheusService {
   pending: boolean = false;
   dataConfig: DataConfig;
@@ -57,11 +72,16 @@ export class PrometheusService {
       const alerts: Display.Alert[] = [];
 
       responseData.data.alerts.forEach((alert: PrometheusAlert) => {
+        const state = normalizeAlertState(alert.state);
+        if (state === undefined) {
+          return;
+        }
+
         const activeAt: Date = new Date(Date.parse(alert.activeAt));
         alerts.push({
           labels: alert.labels,
           annotations: alert.annotations,
-          state: alert.state as Display.AlertState,
+          state,
           value: alert.value,
           age: formatDistanceToNow(activeAt, {}),
           activeAt: activeAt

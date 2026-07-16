@@ -63,6 +63,28 @@ Each instance in the `instances` array supports:
 | `url`        | `string`                 | Yes          | The URL of the Prometheus instance                                          |
 | `headers`    | `Record<string, string>` | No           | Custom headers to include in requests (e.g., `{"X-Scope-OrgId": "team-a"}`) |
 
+### Grafana-Managed Alerts
+
+Alerts managed and evaluated by Grafana itself (rather than proxied from a Prometheus/Mimir data source) can also be
+displayed, since Grafana exposes a Prometheus-compatible endpoint for its own alert rules at
+`<grafana-url>/api/prometheus/grafana/api/v1/alerts`. Point an instance's `url` at that base path and pass a Grafana
+service account token in `headers`:
+
+```javascript
+{
+  url: "https://grafana.mydomain.com/api/prometheus/grafana",
+  headers: {
+    Authorization: "Bearer <grafana-service-account-token>"
+  }
+}
+```
+
+Grafana returns every configured rule on every poll (not just actively firing/pending ones), with a wider set of
+states than plain Prometheus, e.g. `Normal`, `Alerting`, `Pending`, optionally suffixed with a health flag such as
+`Normal (NoData)` or `Alerting (Error)`. This module normalizes those states and only displays rules that are
+actively `Alerting` (shown as firing) or `Pending`; rules in the `Normal` state are filtered out, matching how a
+native Prometheus `/api/v1/alerts` endpoint behaves.
+
 ## Config Examples
 
 ### Minimal Configuration
